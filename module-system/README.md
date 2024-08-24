@@ -79,6 +79,3 @@ If you're migrating a project from CommonJS to ESM, you'll need to:
 1.  Rename files from .js to .mjs or set "type": "module" in package.json.
     
 2.  Replace require() with import and module.exports with export.
-    
-
-Would you like more information on a specific aspect of the Node.js module system?
