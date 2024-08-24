@@ -16,12 +16,19 @@ CommonJS is the original module system for Node.js and is synchronous, which mea
 **Example:**
 
 **math.js:**
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   jsCopy code// Exporting using module.exports  module.exports.add = function (a, b) {    return a + b;  };   `
+```
+// Exporting using export statement
+export function add(a, b) {
+  return a + b;
+}
+```
 
 **app.js:**
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   jsCopy code// Importing using require()  const math = require('./math');  console.log(math.add(2, 3)); // Output: 5   `
+```
+// Importing using require()
+const math = require('./math');
+console.log(math.add(2, 3)); // Output: 5
+```
 
 ### 2\. ES Modules (ESM)
 
@@ -41,12 +48,18 @@ ES Modules is the modern module system based on the ECMAScript (JavaScript) spec
 To use ES Modules in Node.js, ensure your file has a .mjs extension or add "type": "module" in your package.json.
 
 **math.mjs:**
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   jsCopy code// Exporting using export statement  export function add(a, b) {    return a + b;  }   `
+```
+// Exporting using export statement
+export function add(a, b) {
+  return a + b;
+}
+```
 
 **app.mjs:**
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   jsCopy code// Importing using import statement  import { add } from './math.mjs';  console.log(add(2, 3)); // Output: 5   `
+// Importing using import statement
+import { add } from './math.mjs';
+console.log(add(2, 3)); // Output: 5```
+```
 
 ### Choosing Between CommonJS and ESM
 
