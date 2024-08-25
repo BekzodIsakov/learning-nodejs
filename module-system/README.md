@@ -57,8 +57,9 @@ export function add(a, b) {
 
 **app.mjs:**
 // Importing using import statement
+```
 import { add } from './math.mjs';
-console.log(add(2, 3)); // Output: 5```
+console.log(add(2, 3)); // Output: 5
 ```
 
 ### Choosing Between CommonJS and ESM
@@ -70,7 +71,12 @@ console.log(add(2, 3)); // Output: 5```
 
 ### Key Differences
 
-FeatureCommonJSES ModulesFile Extension.js.mjs or .js with "type": "module"Import Syntaxconst fs = require('fs');import fs from 'fs';Export Syntaxmodule.exports = ...export default ... or export const ...LoadingSynchronousAsynchronous
+|     Feature    |           CommonJS          | ES Modules                                 |
+|----------------|-----------------------------|--------------------------------------------|
+| File Extension | `.js`                       | `.mjs` or `.js` with `"type": "module"`    |
+| Import Syntax  | `const fs = require('fs');` | `import fs from 'fs'`;                     |
+| Export Syntax  | `module.exports = ...`      | `export default ...` or `export const ...` |
+| Loading        | Synchronous                 | Asynchronous                               |
 
 ### Migrating from CommonJS to ESM
 
