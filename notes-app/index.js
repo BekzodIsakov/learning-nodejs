@@ -1,6 +1,9 @@
 const yargs = require("yargs");
 const notes = require("./notes");
 
+// console.log(process.argv);
+// In Node.js, process.argv is an array that contains the command-line arguments passed when the Node.js process is launched. The first two elements are always the path to the Node.js executable and the path to the JavaScript file being executed. Any additional command-line arguments will follow these two.
+
 yargs.command({
   command: "add",
   describe: "Adds a new note",
