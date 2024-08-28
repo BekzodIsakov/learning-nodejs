@@ -2,7 +2,7 @@
 
 All notes are saved inside _notes.json_.
 [Yargs](https://www.npmjs.com/package/yargs) package is used to add commands to
-create read list and delete notes
+create, read, list, and delete notes
 
 ## Adding a new note
 
