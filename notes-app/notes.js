@@ -10,6 +10,16 @@ function getNotes() {
   }
 }
 
+function getNoteByTitle(title) {
+  try {
+    const notes = getNotes();
+    const note = notes.find((note) => note.title === title);
+    return note;
+  } catch (error) {
+    return null;
+  }
+}
+
 function saveNotes(notes) {
   const dataJSON = JSON.stringify(notes, null, 2);
   fs.writeFileSync("./notes.json", dataJSON);
@@ -28,6 +38,20 @@ function addNote(title, body) {
     saveNotes(notes);
     console.log("New note added!");
   }
+}
+
+function updateNote(title, body) {
+  if (!body) return;
+  
+  const notes = getNotes();
+  const note = notes.find((note) => note.title === title);
+  if (!note) {
+    return console.error("Note not found!");
+  }
+
+  note.body = body;
+
+  saveNotes(notes);
 }
 
 function removeNote(title) {
@@ -68,6 +92,7 @@ module.exports = {
   getNotes,
   saveNotes,
   addNote,
+  updateNote,
   removeNote,
   listNotes,
   readNote,
