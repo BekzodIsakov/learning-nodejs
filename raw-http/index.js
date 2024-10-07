@@ -1,3 +1,4 @@
+const { error } = require("console");
 const http = require("http");
 const URL = "";
 
@@ -13,3 +14,9 @@ const request = http.request(URL, (response) => {
     console.log(body);
   });
 });
+
+request.on("error", () => {
+  console.log("Something went wrong:", error);
+});
+
+request.end();
