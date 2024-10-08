@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
+const { log } = require("console");
 
 const app = express();
 
@@ -23,6 +24,23 @@ app.get("/", (req, res) => {
   res.render("index", {
     title: "Weather",
     subtitle: "Weather service written in Node.js",
+  });
+});
+
+app.get("/forecast", (req, res) => {
+  const { location } = req.query;
+
+  if (!location) {
+    res.send({
+      status: 400,
+      message: "Forecast location not provided!",
+    });
+  }
+
+  res.send({
+    forecast: 37,
+    unit: "m",
+    location,
   });
 });
 

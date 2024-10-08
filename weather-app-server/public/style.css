@@ -81,14 +81,13 @@ button {
   color: inherit;
 }
 
+button:disabled {
+  opacity: 0.6;
+}
+
 ul,
 ol {
   list-style: none;
-}
-
-/* Optional: Add a subtle transition effect to all elements */
-* {
-  transition: all 0.3s ease-in-out;
 }
 
 footer {
@@ -96,6 +95,11 @@ footer {
   margin-bottom: 0;
   padding-top: 1rem;
   border-top: 1px solid #cbd5e1;
+}
+
+/* Optional: Add a subtle transition effect to all elements */
+* {
+  transition: all 0.2s ease-in-out;
 }
 
 .main-nav {
