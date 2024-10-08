@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - page not found</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+      h1 {
+        text-align: center;
+      }
+      b {
+        font-size: 1.8em;
+      }
+    </style>
+  </head>
+  <body>
+    {{>header}}
+    <main>
+      <h1>
+        <b style="font-size: 1.8em;">{{status}}</b><br/>
+        {{title}}
+      </h1>
+      <button onclick="history.back()">&larr; Go back</button>
+    </main>
+    {{>footer}}
+  </body>
+</html>
