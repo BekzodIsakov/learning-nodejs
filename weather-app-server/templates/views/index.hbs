@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" defer></script>
+  <script src="/app.js" module></script>
 </head>
 
 <body>
@@ -14,7 +14,20 @@
   <main>
     <h1>{{title}}</h1>
     <h3>{{subtitle}}</h3>
-    <button id="forecastBtn">Forecast</button>
+
+    <form id="forecast-form">
+      <input type="search" id="forecast-input" required>
+      <button type="submit" id="forecast-btn">Search</button>
+      <div class="select-wrapper">
+        <select name="units" id="units">
+          <option value="m" selected>m</option>
+          <option value="f">f</option>
+        </select>
+      </div>
+    </form>
+
+    <p id="forecast"></p>
+
     {{!-- <img src="/assets/image.jpg" alt="sample image"> --}}
   </main>
   {{>footer}}

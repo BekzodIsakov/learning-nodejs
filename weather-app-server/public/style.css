@@ -61,6 +61,7 @@ button,
 textarea,
 select {
   font: inherit;
+  padding: 0.3rem;
 }
 
 a {
@@ -109,4 +110,12 @@ footer {
 .main-nav ul {
   display: flex;
   gap: 2rem;
+}
+
+#forecast {
+  margin-top: 2rem;
+}
+
+.select-wrapper {
+  margin-top: 5px;
 }
