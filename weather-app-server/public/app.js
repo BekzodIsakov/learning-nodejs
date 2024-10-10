@@ -1,11 +1,29 @@
 console.log("Client-side Javascript file loaded!");
 
 window.onload = () => {
-  const $forecastInput = document.getElementById("forecast-input");
-  const $unitsSelect = document.getElementById("units");
-  const $forecastBtn = document.getElementById("forecast-btn");
+  const $form = document.getElementById("form");
+  const $searchInput = document.getElementById("searchInput");
+  const $searchBtn = document.getElementById("searchBtn");
+  const $unitsSelect = document.getElementById("unitsSelect");
+  const $location = document.getElementById("location");
   const $forecast = document.getElementById("forecast");
-  const $forecastForm = document.getElementById("forecast-form");
+  const $error = document.getElementById("error");
+
+  if (!$form) {
+    return console.error("Form with id 'form' not found!");
+  } else if (!$searchInput) {
+    return console.error("Input with id 'searchInput' not found!");
+  } else if (!$searchBtn) {
+    return console.error("Button with id 'searchBtn' not found!");
+  } else if (!$unitsSelect) {
+    return console.error("Select with id 'unitsSelect' not found!");
+  } else if (!$location) {
+    return console.error("Element with id 'location' not found!");
+  } else if (!$forecast) {
+    return console.error("Element with id 'forecast' not found!");
+  } else if (!$error) {
+    return console.error("Element with id 'error' not found!");
+  }
 
   let unit = $unitsSelect.value ?? "m";
 
@@ -14,60 +32,57 @@ window.onload = () => {
     const unitDescription = unit === "m" ? "Celsius" : "Fahrenheit";
   });
 
-  if (!$forecastBtn) {
-    return console.error("Button with id 'forecast-btn' not found!");
-  } else if (!$forecastInput) {
-    return console.error("Input with id 'forecast-input' not found!");
-  } else if (!$forecastInput) {
-    return console.error("Input with id 'forecast-input' not found!");
-  } else if (!$forecast) {
-    return console.error("Element with id 'forecast' not found!");
-  } else if (!$forecastForm) {
-    return console.error("Form with id 'forecast-form' not found!");
-  }
-
-  $forecastForm.addEventListener("submit", async (e) => {
+  $form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const location = $forecastInput.value.trim();
+    const location = $searchInput.value.trim();
 
     if (!location) {
       return console.error("Location is not provided!");
     }
 
-    $forecastBtn.disabled = true;
-    $forecastBtn.textContent = "Loading...";
+    $searchBtn.disabled = true;
+    $searchBtn.textContent = "Loading...";
     $forecast.textContent = "";
+    $location.textContent = "";
+    $error.textContent = "";
 
     try {
-      // delay for 2 seconds to see UI loading
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // delay for 1 second to see loading
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response = await fetch(
         `/forecast?location=${location}&unit=${unit}`
       );
       if (!response.ok) {
-        throw new Error("HTTP error! status: ${response.status}");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
       const data = await response.json();
-      $forecast.textContent = data.message;
+      if (data.status < 200 || 299 < data.status) {
+        console.log("ERROR");
+
+        throw new Error(`${data.status}. ${data.message}`);
+      }
+
       console.log(data);
+
+      $forecast.textContent = data.forecast;
+      $location.textContent = data.location;
     } catch (error) {
-      $forecast.textContent =
-        "Error fetching forecast data. Check console for more info.";
-      $forecast.style.color = "red";
+      $error.textContent = error.message;
       console.error("Error fetching forecast data:", error);
     } finally {
-      $forecastBtn.disabled = false;
-      $forecastBtn.textContent = "Search";
+      $searchBtn.disabled = false;
+      $searchBtn.textContent = "Search";
     }
   });
 };
 
-function celsiusToFahrenheit(celsius) {
-  return (celsius * 9) / 5 + 32;
-}
+// function celsiusToFahrenheit(celsius) {
+//   return (celsius * 9) / 5 + 32;
+// }
 
-function fahrenheitToCelsius(fahrenheit) {
-  return ((fahrenheit - 32) * 5) / 9;
-}
+// function fahrenheitToCelsius(fahrenheit) {
+//   return ((fahrenheit - 32) * 5) / 9;
+// }
