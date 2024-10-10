@@ -15,18 +15,22 @@
     <h1>{{title}}</h1>
     <h3>{{subtitle}}</h3>
 
-    <form id="forecast-form">
-      <input type="search" id="forecast-input" required>
-      <button type="submit" id="forecast-btn">Search</button>
+    <form id="form">
+      <input type="search" id="searchInput" placeholder="Enter location" required>
+      <button type="submit" id="searchBtn">Search</button>
       <div class="select-wrapper">
-        <select name="units" id="units">
-          <option value="m" selected>m</option>
-          <option value="f">f</option>
+        <select name="units" id="unitsSelect">
+          <option value="m" selected>Celsius</option>
+          <option value="f">Fahrenheit</option>
         </select>
       </div>
     </form>
 
-    <p id="forecast"></p>
+    <div class="forecast-info">
+      <p id="location"></p>
+      <p id="forecast"></p>
+      <p id="error" style="color: red"></p>
+    </div>
 
     {{!-- <img src="/assets/image.jpg" alt="sample image"> --}}
   </main>

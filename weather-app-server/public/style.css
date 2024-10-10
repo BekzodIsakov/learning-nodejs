@@ -112,10 +112,10 @@ footer {
   gap: 2rem;
 }
 
-#forecast {
-  margin-top: 2rem;
-}
-
 .select-wrapper {
   margin-top: 5px;
+}
+
+.forecast-info {
+  margin-top: 2rem;
 }

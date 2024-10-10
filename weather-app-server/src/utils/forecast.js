@@ -19,7 +19,8 @@ function forecast(latitude, longitude, unit, callback) {
         weather_descriptions,
         temperature,
         feelslike,
-        message: `${name}, ${country}. ${weather_descriptions[0]}. It is currently ${temperature} degrees out. It feels like ${feelslike}.`,
+        location: `${name}, ${country}.`,
+        forecast: `${weather_descriptions[0]}. It is currently ${temperature} degrees out. It feels like ${feelslike}.`,
         unit,
       });
     }
