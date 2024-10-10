@@ -8,7 +8,9 @@ require("dotenv").config();
 
 const app = express();
 
-const PORT = 8080;
+// Use process.env.PORT if it's set (common in production environments),
+// otherwise use 8080 (for development)
+const PORT = process.env.PORT || 8080;
 
 // Define paths for Express config
 const publicDirPath = path.join(__dirname, "../public");
