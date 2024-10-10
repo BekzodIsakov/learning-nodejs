@@ -37,31 +37,11 @@ app.get("/forecast", (req, res) => {
     });
   }
 
-  // if (!location) {
-  //   console.log("\x1b[35m%s\x1b[0m", "Please provide a location!");
-  // } else {
-  //   geocode(location, (error, data) => {
-  //     if (error) {
-  //       console.log("\x1b[35m%s\x1b[0m", error);
-  //     } else if (data) {
-  //       const { latitude, longitude, location } = data;
-
-  //       forecast(latitude, longitude, (error, data) => {
-  //         if (error) {
-  //           console.log("\x1b[35m%s\x1b[0m", error);
-  //         } else if (data) {
-  //           console.log("\x1b[36m", data);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
   geocode(location, (error, data) => {
     if (error) {
       res.send({
         status: 502,
-        error,
+        message: error,
       });
     } else if (data) {
       const { latitude, longitude, location } = data;
@@ -70,7 +50,7 @@ app.get("/forecast", (req, res) => {
         if (error) {
           res.send({
             status: 502,
-            error,
+            message: error,
           });
         } else if (data) {
           res.send({
@@ -81,19 +61,10 @@ app.get("/forecast", (req, res) => {
       });
     }
   });
-
-  // res.send({
-  //   forecast: 37,
-  //   unit: "m",
-  //   location,
-  // });
 });
 
-app.get("*", (req, res) => {
-  res.render("404", {
-    status: 404,
-    title: "Page not found!",
-  });
+app.get("/about", (req, res) => {
+  res.render("about");
 });
 
 app.get("/weather", (req, res) => {
@@ -101,6 +72,13 @@ app.get("/weather", (req, res) => {
     location: "Tashkent",
     forecast: 37,
     unit: "m",
+  });
+});
+
+app.get("*", (req, res) => {
+  res.render("404", {
+    status: 404,
+    title: "Page not found!",
   });
 });
 
