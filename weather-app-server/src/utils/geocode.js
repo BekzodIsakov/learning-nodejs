@@ -1,12 +1,9 @@
 const request = require("postman-request");
 
 async function geocode(place, callback) {
-  const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoiYmVrem9kNTE3IiwiYSI6ImNsaHMwbGF1ZjA0YmkzZXFwMmJvbWpkbXgifQ.ZHpxTPAC9Kr9l64PrnyOwA";
-
   const geocodeURL = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
     place
-  )}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=1`;
+  )}.json?access_token=${process.env.MAPBOX_ACCESS_TOKEN}&limit=1`;
 
   request({ url: geocodeURL, json: true }, (error, response, body) => {
     if (error) {
