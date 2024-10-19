@@ -117,4 +117,24 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
+router.post("/users/logout", isAuthenticated, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => token !== req.token);
+    await req.user.save();
+    res.send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.post("/users/logoutAll", isAuthenticated, async (req, res) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+    res.send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
