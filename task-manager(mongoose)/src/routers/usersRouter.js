@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { UserModel } = require("../models");
+const isAuthenticated = require("../middleware/auth");
 
 const router = new express.Router();
 
@@ -13,7 +14,11 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
+router.get("/users/me", isAuthenticated, async (req, res) => {
+  res.send(req.user);
+});
+
+router.get("/users/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -28,12 +33,13 @@ router.get("/users/:id", async (req, res) => {
 
 router.post("/users/login", async (req, res) => {
   const { email, password } = req.body;
-  
+
   try {
     const user = await UserModel.findByCredentials(email, password);
-    res.send(user);
+    const token = await user.generateAuthToken();
+    res.send({ user, token });
   } catch (error) {
-    res.status(400).send({message: error.message});
+    res.status(400).send({ message: error.message });
   }
 });
 
@@ -41,10 +47,11 @@ router.post("/users", async (req, res) => {
   try {
     const user = new UserModel(req.body);
     const newUser = await user.save();
-    res.status(201).send(newUser);
+    const token = await user.generateAuthToken();
+    res.status(201).send({ user: newUser, token });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).send({message: "Email already exists!"});
+      return res.status(400).send({ message: "Email already exists!" });
     }
 
     res.status(400).send(error.message);

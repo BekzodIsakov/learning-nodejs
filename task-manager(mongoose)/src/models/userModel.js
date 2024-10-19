@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -39,33 +40,25 @@ const userSchema = mongoose.Schema({
       }
     },
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
-userSchema.pre("save", function (next) {
+userSchema.methods.generateAuthToken = async function () {
   const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, "secretToken");
 
-  if (user.password) {
-    const hashedPassword = bcrypt.hashSync(user.password, 8);
-    user.password = hashedPassword;
-  }
-  console.log(user);
-  next();
-});
+  user.tokens.push({ token });
+  await user.save();
 
-userSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate();
-  const query = this.getQuery();
-
-  console.log({ update, query });
-
-  if (update.password) {
-    const hashedPassword = bcrypt.hashSync(update.password, 8);
-    update.password = hashedPassword;
-  }
-
-  console.log(`User with id ${query._id} is going to be updated`);
-  next();
-});
+  return token;
+};
 
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await UserModel.findOne({ email });
@@ -84,6 +77,33 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
   return user;
 };
+
+userSchema.pre("save", function (next) {
+  const user = this;
+
+  // if passport is hashed everytime "save" method is invoked, then if user logs in from laptop 
+  // and then later logs in from his tablet, the hashed password created during the first login/register
+  // will be hashed again which will fail subsequent logins.
+  if (user.isModified("password")) {
+    const hashedPassword = bcrypt.hashSync(user.password, 8);
+    user.password = hashedPassword;
+  }
+
+  next();
+});
+
+userSchema.pre("findOneAndUpdate", function (next) {
+  const update = this.getUpdate();
+  // const query = this.getQuery();
+
+  if (update.password) {
+    const hashedPassword = bcrypt.hashSync(update.password, 8);
+    update.password = hashedPassword;
+  }
+
+  // console.log(`User with id ${query._id} is going to be updated`);
+  next();
+});
 
 const UserModel = mongoose.model("User", userSchema);
 module.exports = UserModel;
