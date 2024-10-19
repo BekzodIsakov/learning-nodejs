@@ -1,18 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const {UserModel} = require("../models");
+const { UserModel } = require("../models");
 
 const router = new express.Router();
-
-router.post("/users", async (req, res) => {
-  try {
-    const user = new UserModel(req.body);
-    const newUser = await user.save();
-    res.status(201).send(newUser);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
 
 router.get("/users", async (req, res) => {
   try {
@@ -33,6 +23,31 @@ router.get("/users/:id", async (req, res) => {
     res.send(user);
   } catch (error) {
     res.status(500).send();
+  }
+});
+
+router.post("/users/login", async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    const user = await UserModel.findByCredentials(email, password);
+    res.send(user);
+  } catch (error) {
+    res.status(400).send({message: error.message});
+  }
+});
+
+router.post("/users", async (req, res) => {
+  try {
+    const user = new UserModel(req.body);
+    const newUser = await user.save();
+    res.status(201).send(newUser);
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).send({message: "Email already exists!"});
+    }
+
+    res.status(400).send(error.message);
   }
 });
 
