@@ -1,12 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { TaskModel } = require("../models");
+const isAuthenticated = require("../middleware/auth");
 
 const router = new express.Router();
 
-router.post("/tasks", async (req, res) => {
+router.post("/tasks", isAuthenticated, async (req, res) => {
   try {
-    const task = new TaskModel(req.body);
+    const task = new TaskModel({ ...req.body, author: req.user._id });
     const newTask = await task.save();
     res.status(201).send(newTask);
   } catch (error) {
@@ -14,9 +15,28 @@ router.post("/tasks", async (req, res) => {
   }
 });
 
-router.get("/tasks", async (req, res) => {
+router.get("/tasks/:id/author", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const task = await TaskModel.findById(id);
+
+    if (!task) {
+      return res.status(404).send({ message: "Task not found!" });
+    }
+
+    await task.populate("author");
+
+    res.send(task.author);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.get("/tasks", isAuthenticated, async (req, res) => {
   try {
     const tasks = await TaskModel.find();
+    // const tasks = await req.user.
     res.send(tasks);
   } catch (error) {
     res.status(500).send(error);
