@@ -101,17 +101,29 @@ router.patch("/users/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete("/users/me", isAuthenticated, async (req, res) => {
+  // const { id } = req.params;
   // Check if the provided ID is a valid MongoDB ObjectId
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid user ID");
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(400).send("Invalid user ID");
+  // }
+
+  
+  // const user = await UserModel.findByIdAndDelete(req.user._id);
+  // console.log("Type of req.user:", typeof req.user); // Log the type
+  // console.log("req.user:", req.user); // Log the content
+  
+  // if (req.user instanceof mongoose.Document) {
+    //   console.log("req.user is a Mongoose document.", req.user.remove === 'function');
+    // } else {
+      //   console.log("req.user is a plain object.");
+      // }
 
   try {
-    const user = await UserModel.findByIdAndDelete(id);
+    // await req.user.remove(); // ----- As of Mongoose version 6, the remove() method is deprecated in favor of deleteOne() and deleteMany().
+    const user = await UserModel.findByIdAndDelete(req.user._id);
     if (!user) return res.status(404).send("User not found!");
-    res.send({ message: "User deleted successfully!", user });
+    res.send({ message: "User and associated tasks deleted successfully!", user: req.user });
   } catch (error) {
     res.status(500).send(error.message);
   }

@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { TaskModel } = require("../models");
+const { TaskModel, UserModel } = require("../models");
 const isAuthenticated = require("../middleware/auth");
 
 const router = new express.Router();
@@ -12,6 +12,15 @@ router.post("/tasks", isAuthenticated, async (req, res) => {
     res.status(201).send(newTask);
   } catch (error) {
     res.status(400).send(error.message);
+  }
+});
+
+router.get("/tasks/my-tasks", isAuthenticated, async (req, res) => {
+  try {
+    await req.user.populate("tasks");
+    res.send({ tasks: req.user.tasks });
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
@@ -33,7 +42,7 @@ router.get("/tasks/:id/author", async (req, res) => {
   }
 });
 
-router.get("/tasks", isAuthenticated, async (req, res) => {
+router.get("/tasks", async (req, res) => {
   try {
     const tasks = await TaskModel.find();
     // const tasks = await req.user.
@@ -56,7 +65,7 @@ router.get("/tasks/:id", async (req, res) => {
   }
 });
 
-router.patch("/tasks/:id", async (req, res) => {
+router.patch("/tasks/:id", isAuthenticated, async (req, res) => {
   const { id } = req.params;
 
   // Check if the provided ID is a valid MongoDB ObjectId
@@ -83,12 +92,17 @@ router.patch("/tasks/:id", async (req, res) => {
   }
 
   try {
-    const task = await TaskModel.findByIdAndUpdate(
-      id,
+    const searchedTask = await TaskModel.findOne({
+      _id: "6716590fe83acb4e0d00f8a5",
+    });
+    console.log({ searchedTask });
+
+    const task = await TaskModel.findOneAndUpdate(
+      { _id: id, author: req.user._id },
       { ...req.body },
       { new: true, runValidators: true }
     );
-    if (!task) return res.status(404).send("Task not found!");
+    if (!task) return res.status(404).send({ message: "Task not found!" });
     res.send(task);
   } catch (error) {
     console.error("Error during update:", error);
@@ -96,7 +110,7 @@ router.patch("/tasks/:id", async (req, res) => {
   }
 });
 
-router.delete("/tasks/:id", async (req, res) => {
+router.delete("/tasks/:id", isAuthenticated, async (req, res, next) => {
   const { id } = req.params;
   // Check if the provided ID is a valid MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -104,11 +118,14 @@ router.delete("/tasks/:id", async (req, res) => {
   }
 
   try {
-    const task = await TaskModel.findByIdAndDelete(id);
-    if (!task) return res.status(404).send("Task not found!");
+    const task = await TaskModel.findOneAndDelete({
+      _id: id,
+      author: req.user._id,
+    });
+    if (!task) return res.status(404).send({ message: "Task not found!" });
     res.send({ message: "Task deleted successfully!", task });
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 });
 
